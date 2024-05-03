@@ -9,7 +9,7 @@
     "useTabs": false
   },
   "exclude": [
-    "main.js"
+    "main.cjs"
   ],
   "tasks": {
     "build": "deno run --allow-read --allow-write --allow-run --allow-env build.ts",

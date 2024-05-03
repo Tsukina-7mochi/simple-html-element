@@ -2,9 +2,10 @@ import * as esbuild from 'esbuild';
 
 await esbuild.build({
   entryPoints: ['mod.ts'],
-  outfile: 'main.js',
+  outfile: 'main.cjs',
   bundle: true,
-  platform: 'neutral',
+  format: 'cjs',
+  platform: 'node',
   minify: true,
 });
 await esbuild.stop();
