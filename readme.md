@@ -6,12 +6,24 @@ Simple HTML element implementation for text rendering.
 
 ### Node.js
 
-TBD
+```shell
+npm install simple-html-element
+```
+
+```
+const { SimpleHTMLElement } = require("../simple-html-element/main.cjs");
+
+const element = new SimpleHTMLElement('div', {}, ['hello']);
+console.log(`${element}`);
+```
 
 ### Deno
 
 ```javascript
 import SimpleHTMLElement from 'https://deno.land/x/simple_html_element/mod.ts';
+
+const element = new SimpleHTMLElement('div', {}, ['hello']);
+console.log(`${element}`);
 ```
 
 ## Usage
