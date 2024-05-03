@@ -7,11 +7,11 @@ Simple HTML element implementation for text rendering.
 ### Node.js
 
 ```shell
-npm install simple-html-element
+$npm install simple-html-element
 ```
 
-```
-const { SimpleHTMLElement } = require("../simple-html-element/main.cjs");
+```javascript
+const { SimpleHTMLElement } = require('../simple-html-element/main.cjs');
 
 const element = new SimpleHTMLElement('div', {}, ['hello']);
 console.log(`${element}`);
