@@ -2,7 +2,7 @@
   "name": "simple-html-element",
   "version": "v1.0.3",
   "description": "Simple HTML element implementation for text rendering",
-  "main": "main.js",
+  "main": "main.cjs",
   "scripts": {
     "build": "deno task build",
     "test": "deno task test",
