@@ -5,4 +5,4 @@ pre-commit:
     lint:
       run: deno lint .
     format:
-      run: deno fmt .
+      run: deno fmt --check
