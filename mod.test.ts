@@ -135,4 +135,15 @@ Deno.test('SimpleHTMLElement', async (ctx) => {
       '<input type="checkbox" checked="true">',
     );
   });
+
+  await ctx.step('options propagation', () => {
+    const element = new SimpleHTMLElement('div', { foo: true }, [
+      new SimpleHTMLElement('br', { bar: true }),
+    ]);
+
+    assertEquals(
+      element.toString({ explicitBooleanValue: true, selfClose: true }),
+      '<div foo="true"><br bar="true" /></div>',
+    );
+  });
 });

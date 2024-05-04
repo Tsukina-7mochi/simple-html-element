@@ -65,7 +65,7 @@ class SimpleHTMLElement {
         return `<${this.tag}${attributes}>`;
       }
     } else {
-      const content = this.children.map((v) => v.toString()).join('');
+      const content = this.children.map((v) => v.toString(options)).join('');
       return `<${this.tag}${attributes}>${content}</${this.tag}>`;
     }
   }
