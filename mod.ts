@@ -7,7 +7,6 @@ const voidElements = [
   'hr',
   'img',
   'input',
-  'input',
   'link',
   'meta',
   'param',
@@ -18,17 +17,18 @@ const voidElements = [
 
 type ArrayOrSingle<T> = T | T[];
 type ToStringOptions = {
-  selfClose: boolean;
+  selfClose?: boolean;
+  explicitBooleanValue?: boolean;
 };
 
 class SimpleHTMLElement {
   tag: string;
-  attributes: Record<string, string>;
+  attributes: Record<string, string | boolean>;
   children: (SimpleHTMLElement | string)[];
 
   constructor(
     tag: string,
-    attributes?: Record<string, string>,
+    attributes?: Record<string, string | boolean>,
     children?: ArrayOrSingle<SimpleHTMLElement | string>,
   ) {
     this.tag = tag;
@@ -42,7 +42,17 @@ class SimpleHTMLElement {
 
   toString(options?: ToStringOptions): string {
     let attributes = [...Object.entries(this.attributes)]
-      .map(([key, value]) => `${key}="${value.replace(/"/g, '\\"')}"`)
+      .filter(([_, value]) => value !== false)
+      .map(([key, value]) => {
+        if (typeof value === 'string') {
+          return `${key}="${value.replace(/"/g, '\\"')}"`;
+        } else {
+          if (options?.explicitBooleanValue) {
+            return `${key}="true"`;
+          }
+          return key;
+        }
+      })
       .join(' ');
     if (attributes.length > 0) {
       attributes = ' ' + attributes;

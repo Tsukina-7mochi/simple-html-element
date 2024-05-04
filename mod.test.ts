@@ -111,4 +111,28 @@ Deno.test('SimpleHTMLElement', async (ctx) => {
 
     assertEquals(element.toString(), '<br id="line-break" class="whitespace">');
   });
+
+  await ctx.step('boolean attributes', () => {
+    const element = new SimpleHTMLElement('input', {
+      type: 'checkbox',
+      checked: true,
+    });
+
+    assertEquals(
+      element.toString(),
+      '<input type="checkbox" checked>',
+    );
+  });
+
+  await ctx.step('boolean attributes', () => {
+    const element = new SimpleHTMLElement('input', {
+      type: 'checkbox',
+      checked: true,
+    });
+
+    assertEquals(
+      element.toString({ explicitBooleanValue: true }),
+      '<input type="checkbox" checked="true">',
+    );
+  });
 });
