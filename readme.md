@@ -11,7 +11,7 @@ $npm install simple-html-element
 ```
 
 ```javascript
-const { SimpleHTMLElement } = require('../simple-html-element/main.cjs');
+const { SimpleHTMLElement } = require('simple-html-element');
 
 const element = new SimpleHTMLElement('div', {}, ['hello']);
 console.log(`${element}`);
