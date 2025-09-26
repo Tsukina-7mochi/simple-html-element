@@ -7,7 +7,11 @@ Simple HTML element implementation for text rendering.
 ### Node.js
 
 ```shell
-$npm install simple-html-element
+# on deno
+$ deno add jsr:@tsukina-7mochi/simple-html-element
+
+# on npm
+$ npx jsr add @tsukina-7mochi/simple-html-element
 ```
 
 ```javascript
