@@ -1,75 +1,97 @@
-const voidElements = [
-  'area',
-  'base',
-  'br',
-  'col',
-  'embed',
-  'hr',
-  'img',
-  'input',
-  'link',
-  'meta',
-  'param',
-  'source',
-  'track',
-  'wbr',
-];
+import { unpairedTags as defaultUnpairedTags } from './unpairedTags.ts';
+import { setOrPredicatorIncludes } from './util.ts';
 
-type ArrayOrSingle<T> = T | T[];
-type ToStringOptions = {
-  selfClose?: boolean;
-  explicitBooleanValue?: boolean;
+type OneOrMany<T> = T | T[];
+
+export type SimpleHTMLElementInit<T extends string = string> = {
+  tag: T;
+  attributes?: Record<string, string | boolean>;
+  children?: OneOrMany<SimpleHTMLElement | SimpleHTMLElementInit | string>;
 };
 
-class SimpleHTMLElement {
-  tag: string;
+export type ToStringOptions = {
+  selfClosingTags?: string[] | ((tag: string) => boolean);
+  unpairedTags?: string[] | ((tag: string) => boolean);
+  explicitBooleanAttribute?: boolean;
+};
+
+export class SimpleHTMLElement<T extends string = string> {
+  tag: T;
   attributes: Record<string, string | boolean>;
   children: (SimpleHTMLElement | string)[];
 
   constructor(
-    tag: string,
+    tag: T,
     attributes?: Record<string, string | boolean>,
-    children?: ArrayOrSingle<SimpleHTMLElement | string>,
+    children?: OneOrMany<SimpleHTMLElement | SimpleHTMLElementInit | string>,
+  );
+  constructor(init: SimpleHTMLElementInit);
+  constructor(
+    obj: T | SimpleHTMLElementInit<T>,
+    attributes?: Record<string, string | boolean>,
+    children?: OneOrMany<SimpleHTMLElement | SimpleHTMLElementInit | string>,
   ) {
-    this.tag = tag;
+    if (typeof obj === 'string') {
+      this.tag = obj;
+    } else {
+      this.tag = obj.tag;
+      attributes = obj.attributes;
+      children = obj.children;
+    }
+
     this.attributes = attributes ?? {};
+
     if (typeof children === 'string' || children instanceof SimpleHTMLElement) {
       this.children = [children];
+    } else if (Array.isArray(children)) {
+      this.children = children?.map((item) => {
+        if (typeof item === 'string' || item instanceof SimpleHTMLElement) {
+          return item;
+        } else {
+          return new SimpleHTMLElement(item);
+        }
+      }) ?? [];
+    } else if (children !== undefined) {
+      this.children = [new SimpleHTMLElement(children)];
     } else {
-      this.children = children ?? [];
+      this.children = [];
     }
   }
 
   toString(options?: ToStringOptions): string {
-    let attributes = [...Object.entries(this.attributes)]
+    const isSelfClosing = setOrPredicatorIncludes(
+      options?.selfClosingTags ?? [],
+      this.tag,
+    );
+    const isUnpaired = setOrPredicatorIncludes(
+      options?.unpairedTags ?? defaultUnpairedTags,
+      this.tag,
+    );
+
+    const attributes = [...Object.entries(this.attributes)]
       .filter(([_, value]) => value !== false)
       .map(([key, value]) => {
         if (typeof value === 'string') {
           return `${key}="${value.replace(/"/g, '\\"')}"`;
+        } else if (options?.explicitBooleanAttribute) {
+          return `${key}="true"`;
         } else {
-          if (options?.explicitBooleanValue) {
-            return `${key}="true"`;
-          }
           return key;
         }
-      })
-      .join(' ');
-    if (attributes.length > 0) {
-      attributes = ' ' + attributes;
+      });
+    const attributesString = attributes.length === 0
+      ? ''
+      : ' ' + attributes.join(' ');
+
+    if (this.children.length === 0) {
+      if (isSelfClosing) {
+        return `<${this.tag}${attributesString} />`;
+      } else if (isUnpaired) {
+        return `<${this.tag}${attributesString}>`;
+      }
     }
 
-    if (this.children.length === 0 && voidElements.includes(this.tag)) {
-      if (options?.selfClose) {
-        return `<${this.tag}${attributes} />`;
-      } else {
-        return `<${this.tag}${attributes}>`;
-      }
-    } else {
-      const content = this.children.map((v) => v.toString(options)).join('');
-      return `<${this.tag}${attributes}>${content}</${this.tag}>`;
-    }
+    const content = this.children.map((v) => v.toString(options)).join('');
+    return `<${this.tag}${attributesString}>${content}</${this.tag}>`;
   }
 }
-
-export { SimpleHTMLElement };
-export default SimpleHTMLElement;

@@ -58,7 +58,7 @@ Deno.test('SimpleHTMLElement', async (ctx) => {
   await ctx.step('void element (self-closing)', () => {
     const element = new SimpleHTMLElement('br');
 
-    assertEquals(element.toString({ selfClose: true }), '<br />');
+    assertEquals(element.toString({ selfClosingTags: ['br'] }), '<br />');
   });
 
   await ctx.step('text child', () => {
@@ -131,7 +131,7 @@ Deno.test('SimpleHTMLElement', async (ctx) => {
     });
 
     assertEquals(
-      element.toString({ explicitBooleanValue: true }),
+      element.toString({ explicitBooleanAttribute: true }),
       '<input type="checkbox" checked="true">',
     );
   });
@@ -142,7 +142,10 @@ Deno.test('SimpleHTMLElement', async (ctx) => {
     ]);
 
     assertEquals(
-      element.toString({ explicitBooleanValue: true, selfClose: true }),
+      element.toString({
+        explicitBooleanAttribute: true,
+        selfClosingTags: ['br'],
+      }),
       '<div foo="true"><br bar="true" /></div>',
     );
   });
