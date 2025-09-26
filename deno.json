@@ -12,10 +12,6 @@
     "singleQuote": true,
     "useTabs": false
   },
-  "tasks": {
-    "build": "deno run --allow-read --allow-write --allow-run --allow-env build.ts",
-    "test": "deno test ."
-  },
   "imports": {
     "@std/assert": "jsr:@std/assert@^1.0.14",
     "esbuild": "npm:esbuild"
