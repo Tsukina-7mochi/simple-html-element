@@ -1,7 +1,5 @@
 pre-commit:
   commands:
-    build-js:
-      run: deno task build
     lint:
       run: deno lint .
     format:
