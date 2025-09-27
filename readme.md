@@ -13,9 +13,9 @@ $ npx jsr add @tsukina-7mochi/simple-html-element
 ```
 
 ```typescript
-import SimpleHTMLElement from '@tsukina-7mochi/simple-html-element';
+import SimpleHTMLElement from "@tsukina-7mochi/simple-html-element";
 
-const element = new SimpleHTMLElement('div', {}, ['hello']);
+const element = new SimpleHTMLElement("div", {}, ["hello"]);
 console.log(`${element}`);
 ```
 

@@ -1,5 +1,5 @@
-import { unpairedTags as defaultUnpairedTags } from './unpairedTags.ts';
-import { setOrPredicatorIncludes } from './util.ts';
+import { unpairedTags as defaultUnpairedTags } from "./unpairedTags.ts";
+import { setOrPredicatorIncludes } from "./util.ts";
 
 type OneOrMany<T> = T | T[];
 
@@ -69,7 +69,7 @@ export class SimpleHTMLElement<T extends string = string> {
     attributes?: Record<string, string | boolean>,
     children?: OneOrMany<SimpleHTMLElement | SimpleHTMLElementInit | string>,
   ) {
-    if (typeof obj === 'string') {
+    if (typeof obj === "string") {
       this.tag = obj;
     } else {
       this.tag = obj.tag;
@@ -79,11 +79,11 @@ export class SimpleHTMLElement<T extends string = string> {
 
     this.attributes = attributes ?? {};
 
-    if (typeof children === 'string' || children instanceof SimpleHTMLElement) {
+    if (typeof children === "string" || children instanceof SimpleHTMLElement) {
       this.children = [children];
     } else if (Array.isArray(children)) {
       this.children = children?.map((item) => {
-        if (typeof item === 'string' || item instanceof SimpleHTMLElement) {
+        if (typeof item === "string" || item instanceof SimpleHTMLElement) {
           return item;
         } else {
           return new SimpleHTMLElement(item);
@@ -115,7 +115,7 @@ export class SimpleHTMLElement<T extends string = string> {
     const attributes = [...Object.entries(this.attributes)]
       .filter(([_, value]) => value !== false)
       .map(([key, value]) => {
-        if (typeof value === 'string') {
+        if (typeof value === "string") {
           return `${key}="${value.replace(/"/g, '\\"')}"`;
         } else if (options?.explicitBooleanAttribute) {
           return `${key}="true"`;
@@ -124,8 +124,8 @@ export class SimpleHTMLElement<T extends string = string> {
         }
       });
     const attributesString = attributes.length === 0
-      ? ''
-      : ' ' + attributes.join(' ');
+      ? ""
+      : " " + attributes.join(" ");
 
     if (this.children.length === 0) {
       if (isSelfClosing) {
@@ -135,7 +135,7 @@ export class SimpleHTMLElement<T extends string = string> {
       }
     }
 
-    const content = this.children.map((v) => v.toString(options)).join('');
+    const content = this.children.map((v) => v.toString(options)).join("");
     return `<${this.tag}${attributesString}>${content}</${this.tag}>`;
   }
 }
