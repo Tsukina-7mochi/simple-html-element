@@ -17,5 +17,11 @@ jobs:
     steps:
       - uses: actions/checkout@v4
 
+      - name: Create a tag
+        run: |
+          TAG_NAME="v$(cat deno.json | jq '.version')"
+          git tag "$TAG_NAME"
+          git push origin "$TAG_NAME"
+
       - name: Publish package
         run: npx jsr publish
