@@ -4,7 +4,7 @@ export function setOrPredicatorIncludes<T>(
   setOrPredicator: SetOrPredicator<T>,
   value: T,
 ) {
-  if (typeof setOrPredicator === 'function') {
+  if (typeof setOrPredicator === "function") {
     return setOrPredicator(value);
   }
   return setOrPredicator.includes(value);

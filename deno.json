@@ -1,6 +1,6 @@
 {
   "name": "@tsukina-7mochi/simple-html-element",
-  "version": "2.0.0",
+  "version": "2.0.1",
   "license": "MIT",
   "exports": "./src/mod.ts",
 
@@ -8,14 +8,6 @@
     "erasableSyntaxOnly": true,
     "noFallthroughCasesInSwitch": true,
     "noImplicitOverride": true
-  },
-  "fmt": {
-    "indentWidth": 2,
-    "lineWidth": 80,
-    "proseWrap": "always",
-    "semiColons": true,
-    "singleQuote": true,
-    "useTabs": false
   },
   "imports": {
     "@std/assert": "jsr:@std/assert@^1.0.14",
