@@ -1,3 +1,8 @@
+import {
+  encode as encodeEntities,
+  type EncodeOptions as EncodeEntitiesOptions,
+} from "html-entities";
+
 import { unpairedTags as defaultUnpairedTags } from "./unpairedTags.ts";
 import { setOrPredicatorIncludes } from "./util.ts";
 
@@ -29,6 +34,9 @@ export type ToStringOptions = {
 
   /** Whether to explicitly render boolean attributes as key="true" instead of just the key */
   explicitBooleanAttribute?: boolean;
+
+  /** Options for HTML entity encoding when converting text content and attribute values to strings */
+  entityEncodeOptions?: EncodeEntitiesOptions;
 };
 
 /**
@@ -116,7 +124,7 @@ export class SimpleHTMLElement<T extends string = string> {
       .filter(([_, value]) => value !== false)
       .map(([key, value]) => {
         if (typeof value === "string") {
-          return `${key}="${value.replace(/"/g, '\\"')}"`;
+          return `${key}="${encodeEntities(value)}"`;
         } else if (options?.explicitBooleanAttribute) {
           return `${key}="true"`;
         } else {
@@ -135,7 +143,15 @@ export class SimpleHTMLElement<T extends string = string> {
       }
     }
 
-    const content = this.children.map((v) => v.toString(options)).join("");
+    const content = this.children
+      .map((v) => {
+        if (typeof v === "string") {
+          return encodeEntities(v, options?.entityEncodeOptions);
+        } else {
+          return v.toString(options);
+        }
+      })
+      .join("");
     return `<${this.tag}${attributesString}>${content}</${this.tag}>`;
   }
 }
