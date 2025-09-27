@@ -185,3 +185,37 @@ Deno.test("options propagation", () => {
     '<div foo="true"><br bar="true" /></div>',
   );
 });
+
+Deno.test("entity escaping", () => {
+  const element = new SimpleHTMLElement("p", {}, `< > " \' & © ∆`);
+
+  assertEquals(
+    element.toString(),
+    "<p>&lt; &gt; &quot; &apos; &amp; © ∆</p>",
+  );
+});
+
+Deno.test("entity escaping with options", () => {
+  const element = new SimpleHTMLElement("p", {}, `< ©`);
+
+  assertEquals(
+    element.toString({
+      entityEncodeOptions: {
+        mode: "nonAsciiPrintable",
+        level: "xml",
+      },
+    }),
+    "<p>&lt; &#169;</p>",
+  );
+});
+
+Deno.test("entity escaping inattribute", () => {
+  const element = new SimpleHTMLElement("p", {
+    ["data-foo"]: `< > " ' & © ∆`,
+  });
+
+  assertEquals(
+    element.toString(),
+    `<p data-foo="&lt; &gt; &quot; &apos; &amp; © ∆"></p>`,
+  );
+});
